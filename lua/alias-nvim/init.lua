@@ -1,5 +1,5 @@
 local function setup(bindings)
-    local exec_path = vim.fn.stdpath('data') .. '/alias-me/'
+    local exec_path = vim.fn.stdpath('data') .. '/alias.nvim/'
     os.execute('mkdir -p ' .. exec_path)
     local path = vim.fn.getenv('PATH')
     vim.fn.setenv('PATH', exec_path .. ':' .. path)
