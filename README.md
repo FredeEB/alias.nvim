@@ -18,19 +18,28 @@ Some usages examples can be found below
 
 ```lua
 require('alias').setup{
-    -- open a file in the current neovim session
+    -- open a file in the current neovim session to avoid nested sessions
     -- shell variable expansion works just like normal $1, $#, $@, etc.
-    v = 'e $1'
+    nvim = 'e $@'
 
     -- simple binding of gl to telescopes git commit log
     gl = 'Telescope git_commits',
 
-    -- lauch neogit with gs
+    -- launch neogit with gs
     gs = 'Neogit'
 
     -- use system man or nvim man
-    man = 'e man://$1'
+    man = 'e man://$@'
 }
+```
+
+The above config allows calling those aliases as scripts from within the neovim terminal.
+
+```bash
+$ v init.lua # opens init.lua in your current nvim session
+$ gl # runs :Telescope git_commits
+$ gs # runs :Neogit
+$ man socket $ overrides the normal man program, due to path precedence, and calls :e man://socket
 ```
 
 # Ideas
