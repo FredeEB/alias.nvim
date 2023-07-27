@@ -13,9 +13,19 @@ local function bind_command(binding, command)
     write_shell_script(binding, [[lua vim.cmd(']] .. command .. [[')]])
 end
 
+local function get_shell_parameter_placeholders(func)
+    local arity = debug.getinfo(func, 'u').nparams
+    local res = ""
+    for i=1, arity, 1 do
+        res = res .. ", '$" .. i .. "'"
+    end
+    return res
+end
+
 local function bind_function(binding, func)
     M.functions[binding] = func
-    write_shell_script(binding, [[lua require('alias-nvim').exec(']] .. binding .. [[')]])
+    local args = get_shell_parameter_placeholders(func) 
+    write_shell_script(binding, [[lua require('alias-nvim').exec(']] .. binding .. [[']] .. args .. [[)]])
 end
 
 M.setup = function(options)
@@ -35,8 +45,8 @@ M.setup = function(options)
     os.execute('chmod +x' .. M.exec_path .. '*')
 end
 
-M.exec = function(binding)
-    M.functions[binding]()
+M.exec = function(binding, ...)
+    M.functions[binding](...)
 end
 
 return M
