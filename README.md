@@ -12,39 +12,46 @@ Lazy.nvim
 
 # Usage
 
-The plugin adds a directory to your PATH environment when you start it up, so all aliases take precedence over the rest of your path, making it very useful if you want to override programs or scripts only when you are in neovim.
+This plugin adds the ability to call neovim commands and functions from your shell. Simply add a mapping between a shell script name and a neovim command or function, restart neovim, and you'll have the commands available in your PATH.
 
 Some usages examples can be found below
 
 ```lua
-require('alias').setup{
-    -- open a file in the current neovim session to avoid nested sessions
-    -- shell variable expansion works just like normal $1, $#, $@, etc.
-    nvim = 'e $@'
-
-    -- simple binding of gl to telescopes git commit log
-    gl = 'Telescope git_commits',
-
-    -- launch neogit with gs
-    gs = 'Neogit'
-
-    -- use system man or nvim man
-    man = 'e man://$@'
+require('alias-nvim').setup {
+    commands = {
+        -- running v in your shell will cd into your 
+        -- current directory and open the file in your current editor
+        v = 'cd $PWD | e ${1:-.}',
+        -- running m in your shell will open the nvim man pager in your current editor
+        m = 'Man $1',
+    },
+    functions = {
+        -- open neogit in 
+        gs = function() require('neogit').open { cwd = '$PWD' } end,
+        -- run diffview
+        gd = function () require('diffview').open { cwd = '$PWD' } end,
+        -- list git commits using fzf-lua
+        gl = function () require('fzf-lua').git_commits() end,
+        -- list git branches using fzf-lua
+        gb = function () require('fzf-lua').git_branches() end,
+    }
 }
 ```
 
-The above config allows calling those aliases as scripts from within the neovim terminal.
+The plugin adds a directory to your PATH environment when you start it up, so all aliases take precedence over the rest of your path, making it very useful if you want to override programs or scripts only when you are in neovim.
 
-```bash
-$ v init.lua # opens init.lua in your current nvim session
-$ gl # runs :Telescope git_commits
-$ gs # runs :Neogit
-$ man socket $ overrides the normal man program, due to path precedence, and calls :e man://socket
+# Configuration
+
+```lua
+require('alias-nvim').setup {
+    -- Vim style commands, default is empty
+    commands = {},
+    -- Lua function bindings, default is empty
+    functions = {},
+    -- default path for storing the scripts. will be created if it doesn't exist. Always prepended to PATH
+    exec_path = vim.fn.stdpath('data') .. '/alias.nvim/'
+}
 ```
-
-# Ideas
-
-Add support for calling lua functions
 
 # Contributing
 
