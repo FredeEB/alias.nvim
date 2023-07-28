@@ -26,14 +26,18 @@ require('alias-nvim').setup {
         m = 'Man $1',
     },
     functions = {
-        -- open neogit in 
-        gs = function() require('neogit').open { cwd = '$PWD' } end,
+        -- run arbitrary function with positional args
+        -- $ echo test
+        echo = function (arg, opts) vim.print(arg) end,
+        -- open neogit in current shell directory using opts.cwd
+        -- $ gs
+        gs = function (opts) require('neogit').open { cwd = opts.cwd } end,
         -- run diffview
+        -- $ gd
         gd = function () require('diffview').open { cwd = '$PWD' } end,
         -- list git commits using fzf-lua
+        -- $ gl
         gl = function () require('fzf-lua').git_commits() end,
-        -- list git branches using fzf-lua
-        gb = function () require('fzf-lua').git_branches() end,
     }
 }
 ```
@@ -47,6 +51,7 @@ require('alias-nvim').setup {
     -- Vim style commands, default is empty
     commands = {},
     -- Lua function bindings, default is empty
+    -- they can take any number of parameters which will be passed from the terminal
     functions = {},
     -- default path for storing the scripts. will be created if it doesn't exist. Always prepended to PATH
     exec_path = vim.fn.stdpath('data') .. '/alias.nvim/'
