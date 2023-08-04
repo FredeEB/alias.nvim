@@ -12,6 +12,7 @@ end
 local write_shell_script = function(path, script)
     local handle = io.open(M.exec_path .. path, "w")
     assert(handle)
+    handle:write("if [[ ! -f $NVIM ]]\nthen\n\t$@\nfi\n")
     handle:write([[nvim --server $NVIM --remote-send "<cmd>]] .. script .. [[<cr>"]])
     handle:close();
 end
