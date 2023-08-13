@@ -6,7 +6,11 @@ M.bindings = {}
 local setup_path = function()
     os.execute('mkdir -p ' .. M.exec_path)
     local path = vim.fn.getenv('PATH')
-    vim.fn.setenv('PATH', M.exec_path .. ':' .. path)
+    _, count = string.gsub(path, M.exec_path .. ':', '')
+    if count == 0 then
+        vim.fn.setenv('PATH', M.exec_path .. ':' .. path)
+    end
+end
 end
 
 local write_shell_script = function(path, script)
