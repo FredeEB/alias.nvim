@@ -11,6 +11,11 @@ local setup_path = function()
         vim.fn.setenv('PATH', M.exec_path .. ':' .. path)
     end
 end
+
+local teardown_path = function()
+    local path = vim.fn.getenv('PATH')
+    path = string.gsub(path, M.exec_path .. ':', '')
+    vim.fn.setenv('PATH', path)
 end
 
 local write_shell_script = function(path, script)
@@ -75,6 +80,12 @@ M.setup = function(options)
         end
     end
     os.execute('chmod +x ' .. M.exec_path .. '*')
+
+    vim.api.nvim_create_augroup('AliasNvim', { clear = true })
+    vim.api.nvim_create_autocmd('VimLeave', {
+        group = 'AliasNvim',
+        callback = teardown_path,
+    })
 end
 
 M.exec = function(binding, ...)
