@@ -6,7 +6,7 @@ M.bindings = {}
 local setup_path = function()
     os.execute('mkdir -p ' .. M.exec_path)
     local path = vim.fn.getenv('PATH')
-    _, count = string.gsub(path, M.exec_path .. ':', '')
+    local _, count = string.gsub(path, M.exec_path .. ':', '')
     if count == 0 then
         vim.fn.setenv('PATH', M.exec_path .. ':' .. path)
     end
