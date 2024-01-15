@@ -21,7 +21,7 @@ end
 local write_shell_script = function(path, script)
     local handle = io.open(M.exec_path .. path, "w")
     assert(handle)
-    handle:write("#!/bin/bash\n")
+    handle:write("#!/usr/bin/env sh\n")
     handle:write("if [[ ! -S \"$NVIM\" ]]; then\n")
     handle:write("  export PATH=$(echo $PATH | sed -e 's|" .. M.exec_path .. ":||g')\n")
     handle:write("  exec $(basename $0) $@\n")
