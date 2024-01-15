@@ -1,3 +1,5 @@
+<img src="./assets/logo.png"/>
+
 # `alias.nvim`
 
 Neovim plugin that makes integration between the nvim shell and nvim more lean and mean. 
